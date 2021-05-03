@@ -28,10 +28,6 @@ module.exports = {
         if (mount) update.mount = mount;
         if (date) update.date = date;
         if (type) update.type = type;
-      
-
-
-
         const updateOperation = await Operations.updateOne(
 
             { "_id": id }
