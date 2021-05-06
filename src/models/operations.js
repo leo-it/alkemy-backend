@@ -4,7 +4,8 @@ const operationModel = new Schema({
     concept: String,
     mount: Number,
     date: Date,
-    type: String
+    type: String,
+    category: String
 
 })
 

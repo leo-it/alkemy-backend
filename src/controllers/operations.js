@@ -8,10 +8,10 @@ module.exports = {
         else return res.status(404).json({ error: "Not found" });
     },
     async post_operation(req, res) {
-        const { concept, mount, date, type } = req.body;
-        console.log(concept, mount, date, type);
+        const { concept, mount, date, type, category } = req.body;
+        console.log(concept, mount, date, type, category);
 
-        if (concept && mount && date && type ) {
+        if (concept && mount && date && type && category) {
                 const newOperations = new Operations(req.body);
                 await newOperations.save(newOperations);
                 console.log(newOperations);
@@ -22,12 +22,14 @@ module.exports = {
     },
     async put_operation(req, res) {
         const { id } = req.params;
-        const { concept, mount, date,type} = req.body;
+        const { concept, mount, date,type, category} = req.body;
         const update = {};
         if (concept) update.concept = concept;
         if (mount) update.mount = mount;
         if (date) update.date = date;
         if (type) update.type = type;
+        if (category) update.category = category;
+
         const updateOperation = await Operations.updateOne(
 
             { "_id": id }
