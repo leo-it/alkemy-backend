@@ -6,6 +6,18 @@ module.exports = {
         const operations = await Operations.find();
         if (operations) return res.status(200).json({ operations });
         else return res.status(404).json({ error: "Not found" });
+    },  
+    async get_operations_category(req, res) {
+        const {params:{category}}= req;
+        const operation = await Operations.find({category: category })
+        if(operation) return res.status(200).json({operation})
+        else return res.status(404).json({error: "not found"})
+    },
+    async get_operations_type(req, res) {
+        const {params:{type}}= req;
+        const operation = await Operations.find({type: type })
+        if(operation) return res.status(200).json({operation})
+        else return res.status(404).json({error: "not found"})
     },
     async post_operation(req, res) {
         const { concept, mount, date, type, category } = req.body;
