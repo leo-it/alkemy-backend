@@ -36,6 +36,7 @@ module.exports = {
 
             , update);
         if (updateOperation.n) {
+            console.log("-----update----")
             return res.status(200).json({ ok: true })
         } else {
             return res.status(404).json({ error: "Operations not found" });
