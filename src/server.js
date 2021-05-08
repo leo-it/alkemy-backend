@@ -1,9 +1,14 @@
 require('dotenv').config();
+const flash = require('connect-flash')
 const express = require('express')
 const cors = require('cors');
 const mongoose = require('mongoose');
 const routes = require('./routes/routes')
+const session = require('express-session')
+const passport = require('passport')
+require('./config/passport')
 
+/* variables */
 let USER = "leo",
     PASSWORD = "leoeslomas",
     DB = "alkemy"
@@ -18,11 +23,20 @@ mongoose.connect(DB_URL, {
     console.log('MongoDB conectado');
 })
 
-
+//midlewares
 const app = express();
 app.use(cors());
+
 app.use(express.json());
+app.use(session({
+    secret:'miclavesecreta',
+    resave:true,
+    saveUninitialized: true
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use('/' , routes );
+app.use(flash());
 
 try {
     app.listen(PORT, () => { //Escuchamos al puesto PORT
