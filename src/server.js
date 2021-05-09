@@ -1,12 +1,15 @@
 require('dotenv').config();
-const flash = require('connect-flash')
 const express = require('express')
 const cors = require('cors');
 const mongoose = require('mongoose');
 const routes = require('./routes/routes')
-const session = require('express-session')
+/* const session = require('express-session')
 const passport = require('passport')
 require('./config/passport')
+const flash = require('connect-flash')
+
+
+*/
 
 /* variables */
 let USER = "leo",
@@ -28,15 +31,21 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
-app.use(session({
+/* app.use(session({
     secret:'miclavesecreta',
     resave:true,
     saveUninitialized: true
 }))
 app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.session()) */
 app.use('/' , routes );
-app.use(flash());
+/* app.use(flash());
+ */
+//global variables
+/* app.use((req, res, next)=>{
+    res.locals.user = req.user || null;
+
+}) */
 
 try {
     app.listen(PORT, () => { //Escuchamos al puesto PORT

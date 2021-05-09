@@ -7,8 +7,8 @@ module.exports = {
         req.logout()
     },
     async post_signup(req, res) {
-            /* console.log(req.body);
-            */const {email, password , confirmPassword}=req.body
+             console.log(req.body);
+            const {email, password , confirmPassword}=req.body
             if(password != confirmPassword){
                 res.send('password not match')
             }
@@ -24,7 +24,31 @@ module.exports = {
                 res.end('User save')
             }
             }
-    } 
+    },
+    async post_login(req, res) {
+        console.log(req.body);
+
+        const {email, password}=req.body;
+        const user=User.findOne({email})
+        console.log(user);
+            if(user){            
+                    res.status(200).send('user')
+
+            }else {
+                    res.status(500).send('error autenticar')
+
+
+            }/* else{
+                user.matchPassword(password, (err, user)=>{
+                    if(err){
+                       res.status(500).send('error autenticar')
+                    }else{
+                        res.status(200)
+
+                    } */
+           
+            }
+    
     
     
     /* ,
