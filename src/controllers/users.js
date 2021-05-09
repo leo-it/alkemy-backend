@@ -1,65 +1,53 @@
 const express = require('express')
-const User = require('../models/user')
+const UserModel = require('../models/user')
 const passport = require('passport')
-
+const jwt = require('jsonwebtoken')
+const SECURE_KEY= require('../constants/keys')
 module.exports = {
     async get_logout(req, res) {
         req.logout()
     },
     async post_signup(req, res) {
              console.log(req.body);
-            const {email, password , confirmPassword}=req.body
-            if(password != confirmPassword){
-                res.send('password not match')
-            }
-
-            else{
-                const emailUser = await User.findOne({email:email})
-            if(emailUser){
-                res.end( "emai in use");
-            } else{
-                const newUser= new User({email, password})
+            const {email, password }=req.body
+                const newUser= new UserModel({email, password})
                 newUser.password = await newUser.encryptPassword(password)
                 await newUser.save()
-                res.end('User save')
-            }
-            }
+                return res.json({
+                    status: true,
+                    message: "user register succesfull"
+                })
     },
     async post_login(req, res) {
-        console.log(req.body);
-
         const {email, password}=req.body;
-        const user=User.findOne({email})
-        console.log(user);
-            if(user){            
-                    res.status(200).send('user')
-
-            }else {
-                    res.status(500).send('error autenticar')
-
-
-            }/* else{
-                user.matchPassword(password, (err, user)=>{
-                    if(err){
-                       res.status(500).send('error autenticar')
-                    }else{
-                        res.status(200)
-
-                    } */
-           
+        const user= await UserModel.findOne({email: email})
+            if(!user){            
+              return res.json({
+                    auth: false,
+                    message: "Email or password incorrect"
+                })
             }
-    
-    
-    
-    /* ,
-    async post_login(req, res) {
-        passport.authenticate("local",{
-            successRedirect:'http://localhost:3001/signup',
-            failureRedirect:'http://localhost:3001/signup',
-            failureFlash:true
+            const autenticate = user.confirmPassword(password)
+            if(!autenticate){
+                return res.json({
+                    auth: false,
+                    message: "Email or password incorrect"
+                })
+            } 
+            const token = jwt.sign(user._id.toString(), SECURE_KEY)
+            if(!token){
+                return res.json({
+                    auth: false,
+                    message: "there was a problem, try it again"
+                })
+            }
+            return res.json({
+                auth: true,
+                token: token
+            })
+
+
         }
-        )
-     }  */
     
 
 }

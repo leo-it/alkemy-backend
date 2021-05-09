@@ -6,8 +6,17 @@ const bcrypt= require('bcrypt')
 
 
 const userSchema = new Schema({
-    email: String,
-    password: String
+    email:{
+      type: String,
+      required: true
+    },
+    password: {type: String,
+    required:true
+    },
+    created_at:{
+      type: Date,
+      default: new Date()
+    }
 });
 /* */
 userSchema.methods.encryptPassword = async (password) => {
@@ -16,8 +25,8 @@ userSchema.methods.encryptPassword = async (password) => {
   return hash;
 }
 
-userSchema.methods.matchPassword = async function (password){
-return await bcrypt.compare(password, this.password)
+userSchema.methods.confirmPassword = function(password){
+return bcrypt.compare(password, this.password)
 }
 
 module.exports=mongoose.model('User', userSchema) 

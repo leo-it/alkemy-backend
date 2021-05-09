@@ -3,13 +3,11 @@ const express = require('express')
 const cors = require('cors');
 const mongoose = require('mongoose');
 const routes = require('./routes/routes')
-/* const session = require('express-session')
-const passport = require('passport')
-require('./config/passport')
-const flash = require('connect-flash')
+const helmet = require('helmet')
+const bodyParser = require('body-parser');
+const { urlencoded } = require('body-parser');
+const morgan = require('morgan')
 
-
-*/
 
 /* variables */
 let USER = "leo",
@@ -28,29 +26,25 @@ mongoose.connect(DB_URL, {
 
 //midlewares
 const app = express();
+
+app.use(bodyParser.urlencoded({extended: true}))
+/* app.use(express.json()); */
+app.use(bodyParser.json());
 app.use(cors());
+app.use(helmet())
+app.use(morgan())
 
-app.use(express.json());
-/* app.use(session({
-    secret:'miclavesecreta',
-    resave:true,
-    saveUninitialized: true
-}))
-app.use(passport.initialize())
-app.use(passport.session()) */
+
 app.use('/' , routes );
-/* app.use(flash());
- */
-//global variables
-/* app.use((req, res, next)=>{
-    res.locals.user = req.user || null;
 
-}) */
+
 
 try {
-    app.listen(PORT, () => { //Escuchamos al puesto PORT
+    app.listen(PORT, () => { 
         console.log(`Server on port  http://localhost:${PORT}`);
     })
 } catch (error) {
-    console.log(`Error on port ${PORT}`, error); //En caso de error veremos esto en nuestra consola
+    console.log(`Error on port ${PORT}`, error); 
 }
+
+module.exports=app
