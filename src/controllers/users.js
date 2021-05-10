@@ -27,27 +27,31 @@ module.exports = {
                     message: "Email or password incorrect"
                 })
             }
-            const autenticate = user.confirmPassword(password)
-            if(!autenticate){
-                return res.json({
-                    auth: false,
-                    message: "Email or password incorrect"
-                })
-            } 
-            const token = jwt.sign(user._id.toString(), SECURE_KEY)
-            if(!token){
-                return res.json({
-                    auth: false,
-                    message: "there was a problem, try it again"
-                })
-            }
-            return res.json({
-                auth: true,
-                token: token
-            })
+            //const autenticate = user.confirmPassword(password)
+            const autenticate =   user.confirmPassword(password, function(err, isMatch) {
+                if (err) throw err;
+                console.log('Password123:', isMatch); // -&gt; Password123: true
 
+            if(!isMatch){
+                            return res.json({
+                                auth: false,
+                                message: "Email or password incorrect"
+                            })
+                        } 
+                        const token = jwt.sign(user._id.toString(), SECURE_KEY)
+                        if(!token){
+                            return res.json({
+                                auth: false,
+                                message: "there was a problem, try it again"
+                            })
+                        }
+                    
+                        return res.json({
+                            auth: true,
+                            token: token
+                                })
+                            });
 
         }
     
-
 }

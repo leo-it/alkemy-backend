@@ -25,8 +25,11 @@ userSchema.methods.encryptPassword = async (password) => {
   return hash;
 }
 
-userSchema.methods.confirmPassword = function(password){
-return bcrypt.compare(password, this.password)
+userSchema.methods.confirmPassword = function(password, cb){
+return bcrypt.compare(password, this.password,function(err, isMatch) {
+  if (err) return cb(err);
+  cb(null, isMatch);
+} )
 }
 
 module.exports=mongoose.model('User', userSchema) 

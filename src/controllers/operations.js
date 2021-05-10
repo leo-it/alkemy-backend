@@ -5,15 +5,18 @@ module.exports = {
         async get_operations(req, res) {
         //console.log(req.userID);
         const userID = req.userID;
-
         const operations = await Operations.find({"owner":userID});
         if (operations) return res.status(200).json({ operations });
         else return res.status(404).json({ error: "Not found" });
     },  
     async get_operations_category(req, res) {
         const {params:{category}}= req;
-        const operation = await Operations.find({category: category })
-        if(operation) return res.status(200).json({operation})
+        const userID = req.userID;
+        const operations = await Operations.find({"owner":userID});
+        const operation = await Operations.find({/* operations,  */category: category  })
+/*         if(operations===operation){
+ */      
+if(operations) return res.status(200).json({operation})
         else return res.status(404).json({error: "not found"})
     },
     async get_operations_type(req, res) {

@@ -6,8 +6,8 @@ const routes = require('./routes/routes')
 const helmet = require('helmet')
 const bodyParser = require('body-parser');
 const { urlencoded } = require('body-parser');
-const morgan = require('morgan')
-
+/* const morgan = require('morgan')
+ */
 
 /* variables */
 let USER = "leo",
@@ -32,8 +32,8 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json());
 app.use(cors());
 app.use(helmet())
-app.use(morgan())
-
+/* app.use(morgan())
+ */
 
 app.use('/' , routes );
 
