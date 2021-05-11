@@ -12,11 +12,11 @@ module.exports = {
     async get_operations_category(req, res) {
         const {params:{category}}= req;
         const userID = req.userID;
-        const operations = await Operations.find({"owner":userID});
-        const operation = await Operations.find({/* operations,  */category: category  })
+       // const operations = await Operations.find({"owner":userID});
+        const operations = await Operations.find({category: category, "owner":userID })
 /*         if(operations===operation){
  */      
-if(operations) return res.status(200).json({operation})
+if(operations) return res.status(200).json({operations})
         else return res.status(404).json({error: "not found"})
     },
     async get_operations_type(req, res) {
@@ -80,15 +80,15 @@ if(operations) return res.status(200).json({operation})
 
     async delete_operation(req, res) {
         const { id } = req.params;
-        console.log(id);
-        if (!id) return res.status(400).json({ error: "Not enough parameters" });
+/*         console.log(id);
+ */        if (!id) return res.status(400).json({ error: "Not enough parameters" });
         Operations.findByIdAndDelete(id, (err) => {
             if (err) {
-                console.log(err)
-                return res.status(400).json({ error: "data not deleted" });
+/*                 console.log(err)
+ */                return res.status(400).json({ error: "data not deleted" });
             } else {
-                console.log("Deleted : ", id);
-                return res.status(200).json({ ok: "deleted" });
+/*                 console.log("Deleted : ", id);
+ */                return res.status(200).json({ ok: "deleted" });
             }
         });
     }
